@@ -22,7 +22,7 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@tensorflow/tfjs-node": "^0.2.3",
+    "@tensorflow/tfjs-node": "git@github.com:tensorflow/tfjs-node.git#20c77afa92e53b3530ef73989adfdeea1d5984df",
     "canvas": "^2.3.1",
     "node-fetch": "2.3.0"
   },
