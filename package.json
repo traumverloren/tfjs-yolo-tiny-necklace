@@ -18,8 +18,12 @@
     "type": "git",
     "url": "https://github.com/ModelDepot/tfjs-yolo-tiny"
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "dependencies": {
     "@tensorflow/tfjs-node": "^0.2.3",
+    "canvas": "^2.3.1",
     "node-fetch": "2.3.0"
   },
   "devDependencies": {
