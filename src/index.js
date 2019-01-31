@@ -1,12 +1,41 @@
-import * as tf from '@tensorflow/tfjs';
+const tf = require('@tensorflow/tfjs-node');
+const fs = require('fs');
+const nodeFetch = require('node-fetch')
+const Request = nodeFetch.Request;
+const Response = nodeFetch.Response;
 
-import {
+ global.fetch = function (url, options) {
+  const request = new Request(url, options);
+  if (request.url.substring(0, 5) === 'file:') {
+    return new Promise((resolve, reject) => {
+      const filePath = path.normalize(url.substring('file:///'.length));
+      if (!fs.existsSync(filePath)) {
+        reject(`File not found: ${filePath}`);
+      }
+      const readStream = fs.createReadStream(filePath);
+      readStream.on('open', function () {
+        resolve(new Response(readStream, {
+          url: request.url,
+          status: 200,
+          statusText: 'OK',
+          size: fs.statSync(filePath).size,
+          timeout: request.timeout
+        }));
+      });
+    });
+  } else {
+    return nodeFetch(url, options);
+  }
+};
+const path = require('path')
+
+const {
   yolo_boxes_to_corners,
   yolo_head,
   yolo_filter_boxes,
   YOLO_ANCHORS,
-} from './postprocess';
-import class_names from './coco_classes';
+} = require('./postprocess');
+const class_names = require('./coco_classes');
 
 const DEFAULT_INPUT_DIM = 416;
 
@@ -14,14 +43,12 @@ const DEFAULT_MAX_BOXES = 2048; // TODO: There is a limit to tiny-yolo, need to 
 const DEFAULT_FILTER_BOXES_THRESHOLD = 0.01;
 const DEFAULT_IOU_THRESHOLD = 0.4;
 const DEFAULT_CLASS_PROB_THRESHOLD = 0.4
-const DEFAULT_MODEL_LOCATION =
-  'https://raw.githubusercontent.com/MikeShi42/yolo-tiny-tfjs/master/model2.json';
-
+const DEFAULT_MODEL_LOCATION = `file:///${__dirname}/models/model2.json`;
 /**
  * Downloads a tf.Model, defaults to a MSCOCO trained Tiny YOLO model
  * @param {String} url Tiny YOLO Model URL
  */
-export async function downloadModel(url = DEFAULT_MODEL_LOCATION) {
+async function downloadModel(url = DEFAULT_MODEL_LOCATION) {
   return await tf.loadModel(url);
 }
 
@@ -148,4 +175,7 @@ async function yolo(
   return results;
 }
 
-export default yolo;
+module.exports = {
+  downloadModel,
+  yolo,
+}

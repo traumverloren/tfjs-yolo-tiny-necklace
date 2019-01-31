@@ -6,6 +6,7 @@ module.exports = {
   entry: {
     index: ['./index.js'],
   },
+  target: 'node',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
@@ -25,6 +26,6 @@ module.exports = {
     ],
   },
   externals: {
-    '@tensorflow/tfjs': '@tensorflow/tfjs',
+    '@tensorflow/tfjs-node': '@tensorflow/tfjs-node',
   },
 };

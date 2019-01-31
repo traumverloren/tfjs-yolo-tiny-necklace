@@ -1,12 +1,12 @@
 // Heavily derived from YAD2K (https://github.com/allanzelener/YAD2K)
-import * as tf from '@tensorflow/tfjs';
+const tf = require('@tensorflow/tfjs-node');
 
-export const YOLO_ANCHORS = tf.tensor2d([
+const YOLO_ANCHORS = tf.tensor2d([
   [0.57273, 0.677385], [1.87446, 2.06253], [3.33843, 5.47434],
   [7.88282, 3.52778], [9.77052, 9.16828],
 ]);
 
-export function yolo_filter_boxes(
+function yolo_filter_boxes(
   boxes,
   box_confidence,
   box_class_probs,
@@ -39,7 +39,7 @@ export function yolo_filter_boxes(
  * @param {tf.Tensor} box_wh Bounding box WH Tensor
  * @returns {tf.Tensor} Bounding box corner Tensor
  */
-export function yolo_boxes_to_corners(box_xy, box_wh) {
+function yolo_boxes_to_corners(box_xy, box_wh) {
   const two = tf.tensor1d([2.0]);
   const box_mins = tf.sub(box_xy, tf.div(box_wh, two));
   const box_maxes = tf.add(box_xy, tf.div(box_wh, two));
@@ -58,7 +58,7 @@ export function yolo_boxes_to_corners(box_xy, box_wh) {
 }
 
 // Convert yolo output to bounding box + prob tensors
-export function yolo_head(feats, anchors, num_classes) {
+function yolo_head(feats, anchors, num_classes) {
   const num_anchors = anchors.shape[0];
 
   const anchors_tensor = tf.reshape(anchors, [1, 1, num_anchors, 2]);
@@ -94,7 +94,7 @@ export function yolo_head(feats, anchors, num_classes) {
   return [ box_xy, box_wh, box_confidence, box_class_probs ];
 }
 
-export function box_intersection(a, b) {
+function box_intersection(a, b) {
   const w = Math.min(a[3], b[3]) - Math.max(a[1], b[1]);
   const h = Math.min(a[2], b[2]) - Math.max(a[0], b[0]);
   if (w < 0 || h < 0) {
@@ -103,11 +103,21 @@ export function box_intersection(a, b) {
   return w * h;
 }
 
-export function box_union(a, b) {
+function box_union(a, b) {
   const i = box_intersection(a, b);
   return (a[3] - a[1]) * (a[2] - a[0]) + (b[3] - b[1]) * (b[2] - b[0]) - i;
 }
 
-export function box_iou(a, b) {
+function box_iou(a, b) {
   return box_intersection(a, b) / box_union(a, b);
+}
+
+module.exports = {
+  YOLO_ANCHORS,
+  yolo_filter_boxes,
+  yolo_boxes_to_corners,
+  yolo_head,
+  box_intersection,
+  box_union,
+  box_iou
 }
