@@ -1,5 +1,7 @@
 const tf = require('@tensorflow/tfjs-node');
 const piCamera = require('pi-camera');
+const JVSDisplayOTron = require('jvsdisplayotron');
+const dot3k = new JVSDisplayOTron.DOT3k();
 const { yolo, downloadModel } = require('../src')
 const { createCanvas, loadImage } = require('canvas')
 const canvas = createCanvas(416, 416)
@@ -58,6 +60,22 @@ async function run() {
     console.log(`${className} Confidence: ${Math.round(classProb * 100)}%`)
   });
 
-  await timeout(5000);
+  const counts = boxes.reduce((acc, box) => {
+    if (acc[box.className]) {
+      acc[box.className] += 1;
+    } else {
+      acc[box.className] = 1;
+    }
+    return acc;
+  }, {})
+
+  const textCount = Object.keys(counts).map(key => {
+    return `${counts[key]} ${key}`
+  }).join(',')
+
+  dothat.lcd.write(textCount);
+
+
+  await timeout(1000);
   await run();
 }

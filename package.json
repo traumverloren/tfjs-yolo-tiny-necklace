@@ -26,7 +26,8 @@
     "canvas": "^2.3.1",
     "node-fetch": "2.3.0",
     "yalc": "^1.0.0-pre.27",
-    "pi-camera": "1.2.1"
+    "pi-camera": "1.2.1",
+    "jvsdisplayotron": "1.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
