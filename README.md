@@ -23,13 +23,14 @@ Run tiny-yolo in nodejs!
 
 #### NOTE: NOT CURRENTLY WORKING, WAITING ON NEW RELEASE OF TFJS-NODE PACKAGE 🤞
 
-1. Install node.js & npm:
+1. Install node.js + dependencies:
 
     I installed v8 since I was getting some errors when installing project deps for canvas with v10+ 😢
 
     ```
     $ curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
     $ sudo apt-get install -y nodejs
+    $ sudo apt-get install gcc g++ make
     ```
 
 2. Install yarn:
