@@ -15,7 +15,6 @@ class Webcam {
   capture() {
     return tf.tidy(() => {
       // Reads the image as a Tensor from the webcam <video> element.
-      console.log(this.webcamElement)
       const webcamImage = tf.fromPixels(this.webcamElement);
 
       // Crop the image so we're using the center square of the rectangular

@@ -22,9 +22,11 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@tensorflow/tfjs-node": "0.2.3",
+    "@tensorflow/tfjs-node": "file:.yalc/@tensorflow/tfjs-node",
     "canvas": "^2.3.1",
-    "node-fetch": "2.3.0"
+    "node-fetch": "2.3.0",
+    "yalc": "^1.0.0-pre.27",
+    "pi-camera": "1.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -1,4 +1,5 @@
 const tf = require('@tensorflow/tfjs-node');
+const piCamera = require('pi-camera');
 const { yolo, downloadModel } = require('../src')
 const { createCanvas, loadImage } = require('canvas')
 const canvas = createCanvas(416, 416)
@@ -7,24 +8,39 @@ const Webcam = require('./webcam');
 const path = require('path');
 let model;
 
+const myCamera = new piCamera({
+  mode: 'photo',
+  output: `${ __dirname }/test.jpg`,
+  width: 640,
+  height: 480,
+  nopreview: true,
+});
+
 (async function main() {
   try {
     model = await downloadModel();
-
-    // Draw cat with lime helmet
-    await loadImage(path.resolve(__dirname, './people.jpeg')).then((image) => {
-      ctx.drawImage(image, 0, 0, 416, 416)
-    })
-
-    const webcam = new Webcam(canvas);
-
-    run(webcam);
+    run();
   } catch(e) {
     console.error(e);
   }
 })();
 
-async function run(webcam) {
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function run() {
+  // Take a picture
+  await myCamera.snap()
+
+  // Load the picture
+  const image = await loadImage(path.resolve(__dirname, './test.jpg'))
+
+  // model is expecting 416x416 image
+  ctx.drawImage(image, 0, 0, 416, 416)
+
+  const webcam = new Webcam(canvas);
+
   const inputImage = webcam.capture();
   const t0 = Date.now();
   const boxes = await yolo(inputImage, model);
@@ -33,8 +49,7 @@ async function run(webcam) {
 
   const t1 = Date.now();
   console.log("YOLO inference took " + (t1 - t0) + " milliseconds.");
-  console.log('tf.memory(): ', tf.memory());
-  console.log(boxes)
+  // console.log(boxes)
   boxes.forEach(box => {
     const {
       classProb, className,
@@ -42,4 +57,7 @@ async function run(webcam) {
 
     console.log(`${className} Confidence: ${Math.round(classProb * 100)}%`)
   });
+
+  await timeout(5000);
+  await run();
 }
