@@ -73,7 +73,7 @@ async function run() {
     return `${counts[key]} ${key}`
   }).join(',')
 
-  dothat.lcd.write(textCount);
+  dot3k.lcd.write(textCount);
 
 
   await timeout(1000);
