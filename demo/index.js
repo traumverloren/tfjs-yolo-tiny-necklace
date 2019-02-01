@@ -2,9 +2,9 @@ const piCamera = require('pi-camera');
 const { yolo, downloadModel } = require('../src')
 const { createCanvas, loadImage } = require('canvas')
 const canvas = createCanvas(416, 416)
-const webcam = new Webcam(canvas);
 const ctx = canvas.getContext('2d')
 const Webcam = require('./webcam');
+const webcam = new Webcam(canvas);
 const path = require('path');
 let model;
 
