@@ -10,6 +10,13 @@ const Webcam = require('./webcam');
 const path = require('path');
 let model;
 
+dot3k.lcd.setContrast(45);
+
+// Add some nice backlight colors.
+dot3k.backlight.setLeftToRGB(255,0,0);
+dot3k.backlight.setLeftToRGB(0,255,0);
+dot3k.backlight.setLeftToRGB(0,0,255);
+
 const myCamera = new piCamera({
   mode: 'photo',
   output: `${ __dirname }/test.jpg`,
