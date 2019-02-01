@@ -1,7 +1,7 @@
 const tf = require('@tensorflow/tfjs-node');
 const piCamera = require('pi-camera');
-const JVSDisplayOTron = require('jvsdisplayotron');
-const dot3k = new JVSDisplayOTron.DOT3k();
+// const JVSDisplayOTron = require('jvsdisplayotron');
+// const dot3k = new JVSDisplayOTron.DOT3k();
 const { yolo, downloadModel } = require('../src')
 const { createCanvas, loadImage } = require('canvas')
 const canvas = createCanvas(416, 416)
@@ -10,12 +10,12 @@ const Webcam = require('./webcam');
 const path = require('path');
 let model;
 
-dot3k.lcd.setContrast(45);
+// dot3k.lcd.setContrast(45);
 
-// Add some nice backlight colors.
-dot3k.backlight.setLeftToRGB(255,0,0);
-dot3k.backlight.setLeftToRGB(0,255,0);
-dot3k.backlight.setLeftToRGB(0,0,255);
+// // Add some nice backlight colors.
+// dot3k.backlight.setLeftToRGB(255,0,0);
+// dot3k.backlight.setLeftToRGB(0,255,0);
+// dot3k.backlight.setLeftToRGB(0,0,255);
 
 const myCamera = new piCamera({
   mode: 'photo',
@@ -67,20 +67,20 @@ async function run() {
     console.log(`${className} Confidence: ${Math.round(classProb * 100)}%`)
   });
 
-  const counts = boxes.reduce((acc, box) => {
-    if (acc[box.className]) {
-      acc[box.className] += 1;
-    } else {
-      acc[box.className] = 1;
-    }
-    return acc;
-  }, {})
+  // const counts = boxes.reduce((acc, box) => {
+  //   if (acc[box.className]) {
+  //     acc[box.className] += 1;
+  //   } else {
+  //     acc[box.className] = 1;
+  //   }
+  //   return acc;
+  // }, {})
 
-  const textCount = Object.keys(counts).map(key => {
-    return `${counts[key]} ${key}`
-  }).join(',')
+  // const textCount = Object.keys(counts).map(key => {
+  //   return `${counts[key]} ${key}`
+  // }).join(',')
 
-  dot3k.lcd.write(textCount);
+  // dot3k.lcd.write(textCount);
 
 
   await timeout(1000);
