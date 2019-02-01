@@ -2,6 +2,7 @@ const piCamera = require('pi-camera');
 const { yolo, downloadModel } = require('../src')
 const { createCanvas, loadImage } = require('canvas')
 const canvas = createCanvas(416, 416)
+const webcam = new Webcam(canvas);
 const ctx = canvas.getContext('2d')
 const Webcam = require('./webcam');
 const path = require('path');
@@ -25,16 +26,7 @@ const myCamera = new piCamera({
 })();
 
 function timeout(ms) {
-  runGC()
   return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function runGC() {
- if( typeof global.gc != "undefined" ){
- console.log("Mem Usage Pre-GC "+util.inspect(process.memoryUsage()));
- global.gc();
- console.log("Mem Usage Post-GC "+util.inspect(process.memoryUsage()));
- }
 }
 
 async function run() {
@@ -46,8 +38,6 @@ async function run() {
 
   // model is expecting 416x416 image
   ctx.drawImage(image, 0, 0, 416, 416)
-
-  const webcam = new Webcam(canvas);
 
   const inputImage = webcam.capture();
   const t0 = Date.now();
