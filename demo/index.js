@@ -6,6 +6,11 @@ const ctx = canvas.getContext('2d')
 const Webcam = require('./webcam');
 const webcam = new Webcam(canvas);
 const path = require('path');
+const SerialPort = require('serialport');
+const port = new SerialPort('/dev/ttyAMA0', { baudRate: 9600 });
+
+port.write('<Serial Working!>');
+
 let model;
 
 const myCamera = new piCamera({
@@ -53,6 +58,11 @@ async function run() {
       classProb, className,
     } = box;
 
+    // TODO: Reduce to create a count of results and send to ardiuno.
+    // TODO: Keep track of how detected objects are(n't) changing 
+    // TODO: So can add easter egg patterns when constant # of ppl around.
+
+    port.write(`<${className}>`);
     console.log(`${className} Confidence: ${Math.round(classProb * 100)}%`)
   });
 
