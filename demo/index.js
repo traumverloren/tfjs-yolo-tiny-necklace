@@ -60,7 +60,7 @@ async function run() {
   //   console.log(`${className} Confidence: ${Math.round(classProb * 100)}%`)
   // });
 
-  // Take boxes and reduce to an array with count of objects & send to ardiuno.
+  // Take boxes and reduce to an object with count of objects & send to arduino as a string.
   const summary = boxes.reduce((objectsSeen, object) => {
     if (object.className in objectsSeen) {
       objectsSeen[object.className]++;
@@ -69,9 +69,9 @@ async function run() {
       objectsSeen[object.className] = 1;
     }
     return objectsSeen;
-  }, []);
-  port.write(`<${summary}>`);
-  console.log(summary);
+  }, {});
+  port.write(`<${JSON.stringify(summary)}>`);
+  console.log(JSON.stringify(summary));
 
   await timeout(1000);
   await run();
