@@ -71,7 +71,7 @@ async function run() {
     return objectsSeen;
   }, {});
 
-  const summaryString = JSON.stringify(summary).replace(/{|}/gi,'')
+  const summaryString = JSON.stringify(summary).replace(/{|}|"/gi,'')
   port.write(`<${summaryString}>`);
   console.log(summaryString);
 
