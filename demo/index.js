@@ -52,19 +52,26 @@ async function run() {
 
   const t1 = Date.now();
   console.log("YOLO inference took " + (t1 - t0) + " milliseconds.");
-  // console.log(boxes)
-  boxes.forEach(box => {
-    const {
-      classProb, className,
-    } = box;
 
-    // TODO: Reduce to create a count of results and send to ardiuno.
-    // TODO: Keep track of how detected objects are(n't) changing 
-    // TODO: So can add easter egg patterns when constant # of ppl around.
+  // boxes.forEach(box => {
+  //   const {
+  //     classProb, className,
+  //   } = box;
+  //   console.log(`${className} Confidence: ${Math.round(classProb * 100)}%`)
+  // });
 
-    port.write(`<${className}>`);
-    console.log(`${className} Confidence: ${Math.round(classProb * 100)}%`)
-  });
+  // Take boxes and reduce to an array with count of objects & send to ardiuno.
+  const summary = boxes.reduce((objectsSeen, object) => {
+    if (object.className in objectsSeen) {
+      objectsSeen[object.className]++;
+    }
+    else {
+      objectsSeen[object.className] = 1;
+    }
+    return objectsSeen;
+  }, []);
+  port.write(`<${summary}>`);
+  console.log(summary);
 
   await timeout(1000);
   await run();
