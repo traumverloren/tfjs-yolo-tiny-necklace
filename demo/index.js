@@ -72,7 +72,7 @@ async function run() {
   }, {});
 
   const summaryString = JSON.stringify(summary)
-  port.write(`<${summaryString}>`);
+  port.write(summaryString);
   console.log(summaryString);
 
   await timeout(1000);
