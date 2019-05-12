@@ -70,8 +70,10 @@ async function run() {
     }
     return objectsSeen;
   }, {});
-  port.write(`<${JSON.stringify(summary)}>`);
-  console.log(JSON.stringify(summary));
+
+  const summaryString = JSON.stringify(summary).replace(/("{|}")/gi,'"')
+  port.write(`<${summaryString}>`);
+  console.log(summaryString);
 
   await timeout(1000);
   await run();
